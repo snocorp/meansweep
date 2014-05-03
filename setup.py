@@ -9,12 +9,12 @@ if 'REDISCLOUD_URL' in os.environ and 'REDISCLOUD_PORT' in os.environ and 'REDIS
      packages.append('django-redis-cache')
      packages.append('hiredis')
 
-setup(name='YourAppName',
+setup(name='meansweep',
       version='1.0',
-      description='OpenShift App',
-      author='Your Name',
-      author_email='example@example.com',
-      url='https://pypi.python.org/pypi',
+      description='Minesweep clone',
+      author='Dave Sewell',
+      author_email='snocorp@gmail.com',
+      url='http://snocorp.github.io/',
       install_requires=packages,
 )
 
