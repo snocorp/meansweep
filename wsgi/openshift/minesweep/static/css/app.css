@@ -1,0 +1,35 @@
+/* app css stylesheet */
+
+body {
+    background-color: #fafafa;
+}
+
+.well-heading {
+  margin-top: 0;
+}
+
+.well-clickable:hover {
+  cursor: pointer;
+  background-color: #ccc;
+}
+
+table.minefield {
+  border: 1px solid #ccc;
+}
+
+table.minefield td {
+  padding: 3px;
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 25px;
+}
+
+table.minefield.active td:hover {
+  cursor: pointer;
+  background-color: #ccc;
+}
+
+table.minefield.active td.swept:hover {
+  cursor: default;
+  background-color: none;
+}

@@ -1,0 +1,33 @@
+<div class="container-fluid">
+  <div class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">sweep</span>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="#/">New Game</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3" ng-repeat="record in records">
+      <div class="well">
+        <h2 class="well-heading">{{record.width}} x {{record.height}}</h2>
+        <ul>
+          <li>{{record.width * record.height}} squares</li>
+          <li>{{record.count}} bombs</li>
+          <li>{{record.time}} seconds</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-3" ng-show="records.length === 0">
+      <div class="well">
+        <h2 class="well-heading">No records</h2>
+        <p>Play a <a href="#/">new game</a>!</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.container -->

@@ -1,0 +1,78 @@
+<div class="container-fluid">
+  <div class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">sweep</span>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="#/records">Records</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <h1>sweep!</h1>
+    <p class="lead">Start a new game by choosing a mine field below</p>
+  </div>
+  <div class="alert alert-danger alert-dismissable" ng-show="error">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="clearError()">&times;</button>
+    <span ng-bind="error"></span>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="well well-clickable" ng-click="newGame(8, 8, 15)">
+        <h2 class="well-heading">8 x 8</h2>
+        <p>15% mine coverage</p>
+      </div>
+      <div class="well well-clickable" ng-click="newGame(12, 12, 15)">
+        <h2 class="well-heading">12 x 12</h2>
+        <p>15% mine coverage</p>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="well well-clickable" ng-click="newGame(16, 16, 15)">
+        <h2 class="well-heading">16 x 16</h2>
+        <p>15% mine coverage</p>
+      </div>
+      <div class="well well-clickable" ng-click="newGame(24, 24, 15)">
+        <h2 class="well-heading">24 x 24</h2>
+        <p>15% mine coverage</p>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="well well-clickable" ng-click="newGame(32, 16, 20)">
+        <h2 class="well-heading">32 x 16</h2>
+        <p>20% mine coverage</p>
+      </div>
+      <div class="well well-clickable" ng-click="newGame(32, 32, 20)">
+        <h2 class="well-heading">32 x 32</h2>
+        <p>20% mine coverage</p>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="well">
+        <h2 class="well-heading">Custom</h2>
+        <form role="form">
+          <div ng-class="'form-group ' + (inputError.width ? 'has-error' : '')">
+            <label for="width" class="control-label">Field width</label>
+            <input type="number" max="100" min="1" class="form-control" id="width" ng-model="customField.width">
+            <span class="help-block" ng-bind="inputError.width"></span>
+          </div>
+          <div ng-class="'form-group ' + (inputError.height ? 'has-error' : '')">
+            <label for="height">Field height</label>
+            <input type="number" max="100" min="1" class="form-control" id="height" ng-model="customField.height">
+            <span class="help-block" ng-bind="inputError.height"></span>
+          </div>
+          <div ng-class="'form-group ' + (inputError.chance ? 'has-error' : '')">
+            <label for="chance" class="control-label">Percent bomb coverage</label>
+            <input type="number" max="100" min="0" class="form-control" id="chance" ng-model="customField.chance">
+            <span class="help-block" ng-bind="inputError.chance"></span>
+          </div>
+          <button type="button" class="btn btn-default" ng-click="newCustomGame()">Play</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.container -->

@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand" href="#">sweep</span>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="#/">New Game</a></li>
+      </ul>
+      <p class="navbar-text navbar-right" ng-bind="timer"></p>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="alert alert-danger alert-dismissable" ng-show="error">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="clearError()">&times;</button>
+    <span ng-bind="error"></span>
+  </div>
+  <div class="alert alert-success alert-dismissable" ng-show="result === 'win'">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    You win! <a href="#/">Play again?</a>
+  </div>
+  <div class="alert alert-info alert-dismissable" ng-show="result === 'loss'">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    You lose... <a href="#/">Play again?</a>
+  </div>
+  <table ng-class="'minefield ' + (active ? 'active' : '')" ng-cloak>
+    <tr ng-repeat="cols in rows">
+      <td ng-repeat="col in cols" ng-class="!col.flagged && col.value !== '?' ? 'swept' : ''" ng-click="sweep($parent.$index, $index)" ng-right-click="flag($parent.$index, $index)">
+        <span ng-show="col.flagged" class="glyphicon glyphicon-flag"></span>
+        <span ng-show="!col.flagged && col.value == '?'" class="glyphicon glyphicon-question-sign"></span>
+        <span ng-show="!col.flagged && col.value == -1" class="glyphicon glyphicon-certificate"></span>
+        <span ng-show="!col.flagged && col.value > -1 && col.value != '?'" ng-bind="col.value > 0 ? col.value : ''" class="glyphicon"></span>
+      </td>
+    </tr>
+  </table>
+ </div>
