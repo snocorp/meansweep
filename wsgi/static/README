@@ -10,3 +10,5 @@ Then copy the media/* content to yourapp/wsgi/static/media/ and it should
 just work.
 
 Note: The ^application/ part of the URI match is required.
+
+Note: Static content from sub-modules will get copied here during deployment.
