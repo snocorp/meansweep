@@ -3,13 +3,16 @@
 /* Controllers */
 
 var sweepControllers = angular.module('sweepApp.controllers', []);
-sweepControllers.controller('IndexCtrl', ['$scope', '$location', 'GameService', function($scope, $location, GameService) {
+sweepControllers.controller('IndexCtrl', ['$scope', '$location', 'GameService', 'TogetherJS', function($scope, $location, GameService, TogetherJS) {
   function newGame(width, height, chance) {
     
     var promise = GameService.newGame(width, height, chance)
     promise.then(function(args) {
+        var path = '/s/' + args.data.id;
         if (args.data.id) {
-          $location.path('/s/' + args.data.id);
+          TogetherJS.send({type: "nav", path: path})
+          
+          $location.path(path);
         } else {
           $scope.error = 'Something went wrong. Please try again later.';
         }
@@ -51,6 +54,20 @@ sweepControllers.controller('IndexCtrl', ['$scope', '$location', 'GameService', 
     $scope.inputError = {};
   }
   
+  function navigate(data) {
+    console.log("navigate");
+    console.log(data);
+    
+    $location.path(data.path).replace();
+    
+    $scope.$apply();
+  }
+  
+  function initIndex() {
+    TogetherJS.hub.off("nav", navigate);
+    TogetherJS.hub.on("nav", navigate);
+  }
+  
   $scope.error = null;
   $scope.inputError = {};
   $scope.customField = {
@@ -62,10 +79,12 @@ sweepControllers.controller('IndexCtrl', ['$scope', '$location', 'GameService', 
   $scope.clearError = clearError;
   $scope.newCustomGame = newCustomGame;
   $scope.newGame = newGame;
+  
+  initIndex();
 }])
 
 
-sweepControllers.controller('GameCtrl', ['$scope', '$routeParams', 'GameService', function($scope, $routeParams, GameService) {
+sweepControllers.controller('GameCtrl', ['$scope', '$routeParams', '$location', 'GameService', 'TogetherJS', function($scope, $routeParams, $location, GameService, TogetherJS) {
 
   function tick(startTime) {
     $scope.timer = Math.floor((new Date().getTime() - startTime) / 1000);
@@ -74,6 +93,66 @@ sweepControllers.controller('GameCtrl', ['$scope', '$routeParams', 'GameService'
       tick(startTime);
       $scope.$digest();
     }, 1000);
+  }
+  
+  function refreshGame() {
+    GameService.getGame($routeParams.fieldId)
+      .success(function(data, status, headers, config) {
+        var x, y;
+        if (data.id) {
+          if ($scope.active !== data.active) {
+            for (x = 0; x < data.flags.length; x += 1) {
+              for (y = 0; y < data.flags[x].length; y += 1) {
+                if (data.flags[x][y].value == -1) {
+                  $scope.result = 'loss';
+                  
+                  break;
+                }
+              }
+              
+              if ($scope.result !== null) {
+                break;
+              }
+            }
+            
+            if ($scope.result === null) {
+              $scope.result = 'win';
+              
+              GameService.createRecord($scope.rows[0].length, $scope.rows.length, $scope.count, $scope.timer);
+            }
+          } else {
+            for (x = 0; x < data.flags.length; x += 1) {
+              for (y = 0; y < data.flags[x].length; y += 1) {
+                $scope.rows[x][y] = {
+                  flagged: data.flags[x][y].flagged,
+                  value: data.flags[x][y].value
+                };
+              }
+            }
+          }
+        } else {
+          $scope.error = 'Something went wrong. Please try again later.';
+        }
+      })
+      .error(function(data, status, headers, config) {
+        console.error(data);
+        
+        // use message if provided
+        if (data.error) {
+          $scope.error = data.error;
+        } else {
+          $scope.error = 'Something went wrong. Please try again later.';
+        }
+      });
+  }
+  
+  function navigate(data) {
+    console.log("navigate");
+    console.log(data);
+    
+    $location.path(data.path).replace();
+    
+    $scope.$apply();
   }
   
   function initGame() {
@@ -95,6 +174,13 @@ sweepControllers.controller('GameCtrl', ['$scope', '$routeParams', 'GameService'
           }
             
           tick(data.created_date);
+          
+          //clean up first in case we have been here already
+          TogetherJS.hub.off("action", refreshGame);
+          TogetherJS.hub.on("action", refreshGame);
+          
+          TogetherJS.hub.off("nav", navigate);
+          TogetherJS.hub.on("nav", navigate);
         } else {
           $scope.error = 'Something went wrong. Please try again later.';
         }
@@ -121,6 +207,9 @@ sweepControllers.controller('GameCtrl', ['$scope', '$routeParams', 'GameService'
         GameService.sweep($routeParams.fieldId, x, y)
           .success(function(data, status, headers, config) {
             var i, c;
+            
+            TogetherJS.send({type: "action"});
+            
             if (data.result === 'loss') {
               $scope.rows[x][y].value = -1;
               $scope.active = false;
@@ -165,6 +254,9 @@ sweepControllers.controller('GameCtrl', ['$scope', '$routeParams', 'GameService'
       } else {
         GameService.flag($routeParams.fieldId, x, y)
           .success(function(data, status, headers, config) {
+            
+            TogetherJS.send({type: "action"});
+            
             if (data.result === 'flagged') {
               $scope.rows[x][y].flagged = true;
             } else if (data.result === 'unflagged') {

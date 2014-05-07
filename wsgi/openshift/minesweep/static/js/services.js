@@ -96,3 +96,7 @@ sweepServices.factory('GameService', ['$http', '$q',
     };
     
   }]);
+
+sweepServices.factory('TogetherJS', function(){
+  return TogetherJS;
+});

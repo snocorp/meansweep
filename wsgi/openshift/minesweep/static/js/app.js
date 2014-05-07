@@ -19,4 +19,6 @@ config(['$routeProvider', function($routeProvider) {
     templateUrl: 'static/partials/records.html', 
     controller: 'RecordsCtrl'});
   $routeProvider.otherwise({redirectTo: '/'});
+          
+  TogetherJS();
 }]);
