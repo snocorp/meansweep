@@ -5,6 +5,9 @@
 *~
 *.log
 *.egg-info
+**/*.sqlite3
+.envrc
+.direnv
 .project
 .pydevproject
 venv/
