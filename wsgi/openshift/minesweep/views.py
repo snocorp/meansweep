@@ -236,7 +236,7 @@ def new(request, height, width, chance):
     MAX_CHANCE = 100
     CHANCE_ERROR = 'The percent chance of ' + str(chance) + ' is not valid. It must be a percent from 0 to ' + str(MAX_CHANCE)
 
-    logging.getLogger('meansweep.views.new').info('New game: ' + str(height) + ', ' + str(width) + ', ' + str(chance))
+    logging.getLogger(__name__).info('New game: ' + str(height) + ', ' + str(width) + ', ' + str(chance))
 
     error = None
     try:
